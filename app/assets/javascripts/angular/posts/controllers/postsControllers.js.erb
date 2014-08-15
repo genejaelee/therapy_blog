@@ -1,22 +1,7 @@
 var postsModule = angular.module('postsModule');
 
-postsModule.factory('postActions', function($http){
-	return {
-		
-		likePost: function(postid) {
-			console.log(postid + ' ' + current_user_id);
-			$http({
-				method: 'POST',
-				url: '/posts/like_post',
-				data: { 'post_id': postid, 'user_id': current_user_id },
-			}).then(function(response){
-				console.log(response.data);
-			});
-		}
-	}
-});
 
-var PostsIndexCtrlFn = function($scope, $http, $timeout){
+postsModule.controller('PostsIndexCtrl', ['$scope', '$http', '$timeout', function($scope, $http, $timeout){
 	$scope.current = {
 		'post' : {
 			'type' : 'text'
@@ -66,7 +51,5 @@ var PostsIndexCtrlFn = function($scope, $http, $timeout){
 			$scope.current.comment.text = '';
 		});
 	}
-}
-PostsIndexCtrlFn.$inject = ["$scope", "$http", "$timeout"];
-postsModule.controller('PostsIndexCtrl', PostsIndexCtrlFn);
-
+	
+}]);
