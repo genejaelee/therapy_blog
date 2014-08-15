@@ -4,9 +4,6 @@ source 'https://rubygems.org'
 gem 'rails', '4.0.3'
 gem 'pg', '0.15.1'
 
-# Use sqlite3 as the database for Active Record
-gem 'sqlite3'
-
 group :assets do
   gem 'sass', require: 'sass'
   gem 'sass-rails', '~> 4.0.1'
@@ -38,6 +35,8 @@ end
 gem 'carrierwave'
 gem 'rmagick', require: false
 gem 'mini_magick'
+
+gem 'unicorn'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.1.2'
