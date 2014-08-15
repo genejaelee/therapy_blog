@@ -16,7 +16,7 @@ postsModule.factory('postActions', function($http){
 	}
 });
 
-postsModule.controller('PostsIndexCtrl', function($scope, $http, $timeout, postActions){
+var PostsIndexCtrlFn = function($scope, $http, $timeout){
 	$scope.current = {
 		'post' : {
 			'type' : 'text'
@@ -66,5 +66,7 @@ postsModule.controller('PostsIndexCtrl', function($scope, $http, $timeout, postA
 			$scope.current.comment.text = '';
 		});
 	}
-	
-});
+}
+PostsIndexCtrlFn.$inject = ["$scope", "$http", "$timeout"];
+postsModule.controller('PostsIndexCtrl', PostsIndexCtrlFn);
+
