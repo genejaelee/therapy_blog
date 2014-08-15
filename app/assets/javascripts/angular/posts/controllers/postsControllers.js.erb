@@ -1,0 +1,70 @@
+var postsModule = angular.module('postsModule');
+
+postsModule.factory('postActions', function($http){
+	return {
+		
+		likePost: function(postid) {
+			console.log(postid + ' ' + current_user_id);
+			$http({
+				method: 'POST',
+				url: '/posts/like_post',
+				data: { 'post_id': postid, 'user_id': current_user_id },
+			}).then(function(response){
+				console.log(response.data);
+			});
+		}
+	}
+});
+
+postsModule.controller('PostsIndexCtrl', function($scope, $http, $timeout, postActions){
+	$scope.current = {
+		'post' : {
+			'type' : 'text'
+		}
+	}
+	
+	$scope.toggleLike = function(postid, $event){
+		$http({
+			method: 'POST',
+			url: '/posts/toggle_like',
+			data: { 'post_id': postid, 'user_id': current_user_id },
+		}).then(function(response){
+			console.log(response.data.count);
+			if (response.data.status == 'liked') {
+				$event.target.text = "unlike " + "(" + (response.data.count) + ")";
+			}
+			else if (response.data.status == 'unliked') {
+				$event.target.text = "like " + "(" + (response.data.count) + ")";
+			}
+		});
+	}
+	
+	$scope.commenting = {};
+	$scope.showComments = function(postid, $event){
+		if( $scope.commenting[postid] == true) {
+			$scope.commenting[postid] = false
+		}
+		else {
+			$scope.commenting[postid] = true;
+		}
+	}
+	
+	$scope.comments = [];
+	$scope.postComment = function(postid){
+		console.log('posting comment');
+		$http({
+			method: 'POST',
+			url: '/posts/post_comment',
+			data: { 'post_id': postid, 'user_id': current_user_id, 'text': $scope.current.comment.text },
+		}).then(function(response){
+			console.log(response.data);
+			comment = {
+				'first_name': response.data.first_name,
+				'text': response.data.text
+			}
+			$scope.comments.push(comment);
+			$scope.current.comment.text = '';
+		});
+	}
+	
+});

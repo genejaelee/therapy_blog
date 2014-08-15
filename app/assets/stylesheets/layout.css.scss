@@ -1,0 +1,13 @@
+@import "variables.css.scss";
+
+.panel {
+	background-color: #eee;
+	.bg-container {
+		margin: auto;
+		max-width: $max-panel-width;
+		background-color: #fff;
+		.container {
+			padding: 50px 0px;
+		}
+	}
+}

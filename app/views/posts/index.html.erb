@@ -1,0 +1,101 @@
+<body ng-controller="PostsIndexCtrl as indexCtrl">
+	<script type="text/javascript">
+		<% if current_user %>
+			current_user_id = "<%= current_user.id %>";
+		<% end %>
+		
+	</script>
+	
+<div class="panel" id="posts-panel">
+	<div class="bg-container">
+		<div class="container">
+			<div class="post-form-header">
+				<div ng-class="{text: current.post.type=='text', photo: current.post.type=='photo'}" class="select-border"></div>
+				<div id="text-tab" class="post-tab" ng-click="current.post.type='text'">
+					<span>Text</span>
+				</div>
+				<div id="photo-tab" class="post-tab" ng-click="current.post.type='photo'">
+					<span>Photo</span>
+				</div>
+			</div>
+			<div class="post-form-container">
+				<%= form_for @post, url: { controller: "posts", action: "create" }, :html => { :multipart => true } do |f| %>
+				
+				<div class="header">
+				  <% if current_user %>
+				    <label>Posting as <%= current_user.first_name %>.</label>
+				    <%= link_to "Sign out", signout_path, id: "sign_out", :class => 'navbar-link' %>
+						<%= f.hidden_field :user_id, :value => current_user.id %>
+				  <% else %>
+				    <label>Post anonymously. Or <%= link_to "sign in with Facebook", "/auth/facebook", id: "sign_in", :class => 'navbar-link' %></label>
+				  <% end %>
+				</div>
+				
+					<div id="text-form" ng-hide="current.post.type!='text'">
+						<%= f.text_area :text, :autofocus => "true", :placeholder => "Share something" %>
+					</div>
+					
+					<div id="image-form" ng-hide="current.post.type!='photo'">
+						<%= f.file_field :image %>
+						<div id="image-caption-container">
+							<%= f.label :image_caption, "Caption for your photo." %>
+							<%= f.text_field :image_caption %>
+						</div>
+					</div>
+				
+					<%= f.submit "Submit", :class => "button" %>
+				<% end %>
+			</div>
+			
+			<div id="posts-container">
+				<% @posts.each do |post| %>
+					<div class="post-container">
+						
+						<% if post.user_id.present? %>
+							<label><%= User.find_by(id: post.user_id).first_name %> posted:</label>
+						<% else %>
+							<label>A human being posted:</label>
+						<% end %>
+						
+						<% if post.image.present? %>
+							<%= image_tag post.image_url.to_s %>
+							<p><%= post.image_caption %></p>
+						<% else %>
+							<p><%= post.text %></p>
+						<% end %>
+						
+						<div class="actions-container">
+							<% if current_user %>
+								<% if like = current_user.post_likes.find_by(post_id: post.id) %>
+									<a href ng-click="toggleLike(<%= post.id %>, $event)">unlike (<%= post.post_likes.count %>)</a>
+								<% else %>
+									<a href ng-click="toggleLike(<%= post.id %>, $event)">like (<%= post.post_likes.count %>)</a>
+								<% end %>
+								
+								<a href ng-click="showComments(<%= post.id %>, $event)">comment</a>
+								
+								<div class="comments-container ng-hide" ng-show="commenting[<%= post.id %>]">
+									<label>Comments</label>
+									<% post.post_comments.all.each do |comment| %>
+										<div class="comment-container">
+											<small style="font-weight: 600;"><%= comment.user.first_name %> said:</small>
+											<p><%= comment.text %></p>
+										</div>
+									<% end %>
+									
+									<div class="comment-container" ng-repeat="comment in comments track by $id(comment)">
+										<small style="font-weight: 600;">{{ comment.first_name }} said:</small>
+										<p>{{ comment.text }}</p>
+									</div>
+									<textarea ng-model="current.comment.text" ng-enter="postComment(<%= post.id %>)" placeholder="Type something and press enter."></textarea>
+								</div>
+							<% end %>
+						</div>
+						
+					</div>
+				<% end %>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
