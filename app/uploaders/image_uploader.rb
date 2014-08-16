@@ -7,8 +7,13 @@ class ImageUploader < CarrierWave::Uploader::Base
   include CarrierWave::MiniMagick
 
   # Choose what kind of storage to use for this uploader:
-  storage :file
-  # storage :fog
+  if Rails.env.production?
+    storage :fog
+  else
+    storage :file
+  end
+  
+  config.s3_access_policy = :public_read
 
   # Override the directory where uploaded files will be stored.
   # This is a sensible default for uploaders that are meant to be mounted:
@@ -25,7 +30,19 @@ class ImageUploader < CarrierWave::Uploader::Base
   # end
   
   version :thumb do
-    process :resize_to_limit => [50, 50]
+    process :resize_to_fit => [50, 50]
+  end
+  
+  version :small do
+    process :resize_to_fit => [100, 100]
+  end
+  
+  version :medium do
+    process :resize_to_fit => [200, 200]
+  end
+  
+  version :large do
+    process :resize_to_fit => [400, 400]
   end
 
   # Process files as they are uploaded:
