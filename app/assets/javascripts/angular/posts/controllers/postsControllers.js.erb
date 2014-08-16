@@ -52,4 +52,8 @@ postsModule.controller('PostsIndexCtrl', ['$scope', '$http', '$timeout', functio
 		});
 	}
 	
+	$scope.notLoggedIn = function(){
+		alert('You must be logged in via Facebook to like or comment.');
+	}
+	
 }]);

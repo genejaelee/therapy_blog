@@ -112,9 +112,24 @@
 			#posts-container {
 				.post-container {
 					padding: 20px 0px;
+					text-align: center;
+					
+					label {
+						color: #525252;
+					}
 					
 					p {
 						margin-bottom: 10px;
+					}
+					
+					img {
+						max-width: 480px;
+						max-height: 500px;
+						margin: auto;
+					}
+					
+					img:hover {
+						cursor: pointer;
 					}
 					
 					.actions-container {

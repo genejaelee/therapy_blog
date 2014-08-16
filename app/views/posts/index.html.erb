@@ -54,7 +54,7 @@
 						<% if post.user_id.present? %>
 							<label><%= User.find_by(id: post.user_id).first_name %> posted:</label>
 						<% else %>
-							<label>A human being posted:</label>
+							<label>Someone posted:</label>
 						<% end %>
 						
 						<% if post.image.present? %>
@@ -72,7 +72,7 @@
 									<a href ng-click="toggleLike(<%= post.id %>, $event)">like (<%= post.post_likes.count %>)</a>
 								<% end %>
 								
-								<a href ng-click="showComments(<%= post.id %>, $event)">comment</a>
+								<span style="color: #ddd">|</span> <a href ng-click="showComments(<%= post.id %>, $event)">comment</a>
 								
 								<div class="comments-container ng-hide" ng-show="commenting[<%= post.id %>]">
 									<label>Comments</label>
@@ -89,6 +89,9 @@
 									</div>
 									<textarea ng-model="current.comment.text" ng-enter="postComment(<%= post.id %>)" placeholder="Type something and press enter."></textarea>
 								</div>
+							<% else %>
+								<a href ng-click="notLoggedIn()">like (<%= post.post_likes.count %>)</a>
+								<a href ng-click="notLoggedIn()">comment</a>
 							<% end %>
 						</div>
 						
