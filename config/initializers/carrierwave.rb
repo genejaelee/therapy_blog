@@ -9,7 +9,8 @@ CarrierWave.configure do |config|
     # Configuration for Amazon S3
     :provider              => 'AWS',
     :aws_access_key_id     => ENV["S3_KEY"],
-    :aws_secret_access_key => ENV["S3_SECRET"]
+    :aws_secret_access_key => ENV["S3_SECRET"],
+    :region                => ENV["S3_REGION"]
   }
   
   # Choose what kind of storage to use for this uploader:
