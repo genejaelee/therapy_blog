@@ -12,8 +12,6 @@ class ImageUploader < CarrierWave::Uploader::Base
   else
     storage :file
   end
-  
-  config.s3_access_policy = :public_read
 
   # Override the directory where uploaded files will be stored.
   # This is a sensible default for uploaders that are meant to be mounted:
